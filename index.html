@@ -19,15 +19,24 @@
       padding: 3px 6px;
       border-radius: 3px;
     }
+    .logout-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
   </style>
 </head>
 <body>
-  <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <h1>Welcome to Driver Tracker</h1>
+  <p>This is a protected dashboard. You are logged in!</p>
+  <button class="logout-btn" onclick="logout()">Logout</button>
 
-<script>
-  // Replace with your actual Firebase config:
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCZ55khLGseeM0_1NY4ZiUvywUnSm9HGSc",
       authDomain: "driver-tracker-3766f.firebaseapp.com",
@@ -37,31 +46,27 @@
       appId: "1:791075955808:web:93d81c40972d98eb00cf05"
     };
 
-<script>
-  function logout() {
-    firebase.auth().signOut()
-      .then(() => {
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Redirect to login if not authenticated
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
         window.location.href = "login.html";
-      })
-      .catch((error) => {
-        alert("Error signing out: " + error.message);
-      });
-  }
-</script>
+      }
+    });
 
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  // Redirect if not logged in
-  auth.onAuthStateChanged((user) => {
-    if (!user) {
-      window.location.href = "login.html";
+    // Logout function
+    function logout() {
+      auth.signOut()
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          alert("Error signing out: " + error.message);
+        });
     }
-  });
-</script>
-
+  </script>
 </body>
-
-<button onclick="logout()" style="position: absolute; top: 10px; right: 10px;">Logout</button>
 </html>

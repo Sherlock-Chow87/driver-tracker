@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Driver Dashboard</title>
+  <title>Driver Login</title>
+  <meta charset="UTF-8">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <h1>Welcome to Driver Dashboard</h1>
-  <p>This is a protected page. You must be logged in to view this.</p>
-
-  <!-- Logout Button -->
-  <button onclick="logout()" style="position: absolute; top: 10px; right: 10px;">
-    Logout
-  </button>
+  <h2>Driver Login</h2>
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
+  <button onclick="login()">Login</button>
+  <button onclick="register()">Register</button>
 
   <script>
-    // ✅ Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCZ55khLGseeM0_1NY4ZiUVywUnSm0HGSc",
       authDomain: "driver-tracker-3766f.firebaseapp.com",
@@ -25,24 +23,34 @@
       appId: "1:791075955808:web:93d81c40972d98eb00cf05"
     };
 
-    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // ✅ Protect the page: redirect to login if not authenticated
-    auth.onAuthStateChanged((user) => {
-      if (!user) {
-        window.location.href = "index.html";
-      } else {
-        console.log("Logged in as:", user.email);
-      }
-    });
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-    // ✅ Logout function
-    function logout() {
-      auth.signOut().then(() => {
-        window.location.href = "index.html";
-      });
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Login successful!");
+          window.location.href = "index.html"; // ✅ Redirect to dashboard
+        })
+        .catch((error) => {
+          alert("Login failed: " + error.message);
+        });
+    }
+
+    function register() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Registration successful! You can now log in.");
+        })
+        .catch((error) => {
+          alert("Registration failed: " + error.message);
+        });
     }
   </script>
 </body>

@@ -1,38 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Driver Dashboard</title>
+  <meta charset="UTF-8">
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background-color: #f0f0f0;
-      text-align: center;
-    }
-
-    h1 {
-      color: #333;
-    }
-
-    button {
-      padding: 10px 20px;
-      margin-top: 20px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
-
   <h1>Welcome to the Driver Dashboard</h1>
   <p>You are now logged in.</p>
   <button onclick="logout()">Logout</button>
 
   <script>
-    // Your Firebase config (same as login.html)
     const firebaseConfig = {
       apiKey: "AIzaSyCZ55khLGseeM0_1NY4ZiUVywUnSm0HGSc",
       authDomain: "driver-tracker-3766f.firebaseapp.com",
@@ -45,23 +24,22 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Redirect to login if user is not logged in
+    // 🔐 Redirect to login if user not authenticated
     auth.onAuthStateChanged((user) => {
       if (!user) {
         window.location.href = "login.html";
       }
     });
 
-    // Logout function
     function logout() {
-      auth.signOut().then(() => {
-        alert("Logged out successfully");
-        window.location.href = "login.html";
-      }).catch((error) => {
-        alert("Error logging out: " + error.message);
-      });
+      auth.signOut()
+        .then(() => {
+          window.location.href = "login.html";
+        })
+        .catch((error) => {
+          alert("Logout failed: " + error.message);
+        });
     }
   </script>
-
 </body>
 </html>

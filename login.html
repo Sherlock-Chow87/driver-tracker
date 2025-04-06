@@ -1,56 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Driver Login</title>
+  <title>Driver Dashboard</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
-  <h2>Driver Login</h2>
-  <input type="email" id="email" placeholder="Email"><br><br>
-  <input type="password" id="password" placeholder="Password"><br><br>
-  <button onclick="login()">Login</button>
-  <button onclick="register()">Register</button>
+  <h1>Welcome to Driver Dashboard</h1>
+  <p>This is a protected page. You must be logged in to view this.</p>
+
+  <!-- Logout Button -->
+  <button onclick="logout()" style="position: absolute; top: 10px; right: 10px;">
+    Logout
+  </button>
 
   <script>
-    // Replace with your actual Firebase config
+    // ✅ Firebase config
     const firebaseConfig = {
-  apiKey: "AIzaSyCZ55khLGseeM0_1NY4ZiUVywUnSm0HGSc",
-  authDomain: "driver-tracker-3766f.firebaseapp.com",
-  projectId: "driver-tracker-3766f",
-  storageBucket: "driver-tracker-3766f.firebasestorage.app",
-  messagingSenderId: "791075955808",
-  appId: "1:791075955808:web:93d81c40972d98eb00cf05"
-};
+      apiKey: "AIzaSyCZ55khLGseeM0_1NY4ZiUVywUnSm0HGSc",
+      authDomain: "driver-tracker-3766f.firebaseapp.com",
+      projectId: "driver-tracker-3766f",
+      storageBucket: "driver-tracker-3766f.appspot.com",
+      messagingSenderId: "791075955808",
+      appId: "1:791075955808:web:93d81c40972d98eb00cf05"
+    };
 
+    // ✅ Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    // ✅ Protect the page: redirect to login if not authenticated
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        window.location.href = "index.html";
+      } else {
+        console.log("Logged in as:", user.email);
+      }
+    });
 
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          alert("Login successful!");
-          window.location.href = "index.html"; // redirect to home or dashboard
-        })
-        .catch((error) => {
-          alert("Login failed: " + error.message);
-        });
-    }
-
-    function register() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          alert("Registration successful! You can now log in.");
-        })
-        .catch((error) => {
-          alert("Registration failed: " + error.message);
-        });
+    // ✅ Logout function
+    function logout() {
+      auth.signOut().then(() => {
+        window.location.href = "index.html";
+      });
     }
   </script>
 </body>
